@@ -1,0 +1,18 @@
+To do 
+
+- Clean up files done
+- Create git hub for team to collaborate
+- Documentation
+- Create Markers for all trams(all vehicles?)
+    - currently showing trains need to configure for trams
+- Create updating function
+- make visualisation pretty 
+- repeat for all public transport in nsw?
+- convert into a usable website?(heroku)
+
+
+Links
+https://morioh.com/p/f458678a9ffa
+https://github.com/MobilityData/gtfs-realtime-bindings/blob/master/python/README.md GOAT website 
+https://www.makeuseof.com/tag/python-javascript-communicate-json/
+https://towardsdatascience.com/integrating-google-maps-api-using-python-and-javascript-149fdba27b99
