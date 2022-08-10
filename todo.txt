@@ -6,6 +6,7 @@ To do
 - Create Markers for all trams(all vehicles?)
     - currently showing trains need to configure for trams
 - Create updating function
+    -websocket vs reverse ajax
 - make visualisation pretty 
 - repeat for all public transport in nsw?
 - convert into a usable website?(heroku)
