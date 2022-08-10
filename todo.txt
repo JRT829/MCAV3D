@@ -16,3 +16,4 @@ https://morioh.com/p/f458678a9ffa
 https://github.com/MobilityData/gtfs-realtime-bindings/blob/master/python/README.md GOAT website 
 https://www.makeuseof.com/tag/python-javascript-communicate-json/
 https://towardsdatascience.com/integrating-google-maps-api-using-python-and-javascript-149fdba27b99
+https://hackernoon.com/python-flask-data-visualization-interactive-maps-30bc4e872a14 
