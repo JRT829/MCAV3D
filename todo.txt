@@ -1,6 +1,6 @@
 To do 
 
-- Clean up files done
+- Clean up files source env/bin/activate
 - Create git hub for team to collaborate
 - Documentation
 - Create Markers for all trams(all vehicles?)
