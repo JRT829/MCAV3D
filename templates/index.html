@@ -12,10 +12,12 @@
     <div id="map"></div>
     <div id="data"></div>
    <script>
+    
     let coordinates ='{{coordinates}}'
     console.log(coordinates)
     let coord_temp=document.getElementById('data')
     coord_temp.innerHTML=coordinates 
+    
    </script>
  
   <script src="{{url_for('static', filename='js/main.js')}}"></script>

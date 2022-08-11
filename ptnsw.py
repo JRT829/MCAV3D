@@ -1,7 +1,12 @@
 from flask import Flask, render_template
+from flask_socketio import SocketIO,  emit
 import requests 
 from google.transit import gtfs_realtime_pb2
 from requests.structures import CaseInsensitiveDict
+
+
+
+
 
 #API access
 headers=CaseInsensitiveDict()
@@ -24,7 +29,7 @@ for entity in feed.entity:
 
 
 app = Flask(__name__)
-
+socketio = SocketIO(app) 
 
 
 @app.route("/", methods=['POST', 'GET'])
@@ -35,8 +40,12 @@ def senddata():
 
     return render_template('index.html',coordinates=coordinates) 
 
+@socketio.event
+def my_event(message):
+    emit('my response', {'data': 'got it!'})
+
 if __name__ == "__main__":
-    app.run()
+    socketio.run(app)
 
 
 
