@@ -20,11 +20,11 @@ headers['Authorization']="apikey PtFM8NeyUIGV6RS5hwTWOGiyC2IINOTtHxZz"
 url="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/lightrail/cbdandsoutheast"
 
 app = Flask(__name__)
-socketio = SocketIO(app) 
+socketio =  SocketIO(app=app, cors_allowed_origins='*')
 
 
 
-@socketio.on('data')
+@socketio.on('info')
 def event():
    
     resp = requests.get(url,headers=headers)
