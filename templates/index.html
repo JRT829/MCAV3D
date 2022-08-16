@@ -14,16 +14,21 @@
   
  
   <script src="{{url_for('static', filename='js/main.js')}}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJcC-iTbiurisPUUqn6dd3LVtadL57XEI&callback=initMap"
     async defer></script>
     
-    <script src="./node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js" type="text/javascript" charset="utf-8">
-        
-        var socket = io();
-        socket.on('connect', function() {
-        socket.emit('info');
-        
-    });
+    <script  type="text/javascript" >
+       
+      
+       ;
+       var socket = io.connect('http://localhost:5000');
+        socket.on('connect', function(){
+            socket.send('User has connected');
+        });
+     
+
+      
       
      
     </script>

@@ -4,6 +4,8 @@ let map;
 //console.log(coordinates)
 //let latitude=coordinates[0]
 //let longitude=coordinates[1]
+
+
 function initMap() {
   //let latitude=coordinates[0]
  //let longitude=coordinates[1]
