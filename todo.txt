@@ -7,6 +7,9 @@ To do
     - currently showing trains need to configure for trams
 - Create updating function
     -websocket vs reverse ajax
+    -connect the transfer of data
+    - remove the unable to find module
+    -use a different server?
 - make visualisation pretty 
 - repeat for all public transport in nsw?
 - convert into a usable website?(heroku)
