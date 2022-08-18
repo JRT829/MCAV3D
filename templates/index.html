@@ -10,7 +10,7 @@
   </head>
   <body>
     <div id="map"></div>
-    <div id="data"></div>
+    <div id="tram"></div>
   
  
   <script src="{{url_for('static', filename='js/main.js')}}"></script>
@@ -21,19 +21,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"  ></script>
     <script >
   
-    
+      let coordinates='fhewiofhewofieowhfiowefhioewhfiowfhiowefhwiofhwoiefhiowfhewoifheiwofhwiofhwoifhweoifweoifiowfhwiorhwoifeiowfhwiofwhoifhwoifehwoifwihfiowfhio'
+      let coord_temp= document.getElementById('tram').innerHTML
+     coord_temp=coordinates
       let socket = io('http://localhost:5000');
       socket.on('connect', function(){
         console.log('yes')
         socket.emit('my event', {data: 'I\'m connected!'});
 
-        socket.on('data',function(data){
-          console.log(data)
+        });
+        
+      socket.on('tram',function(coordinates){
+  
+      console.log(coordinates)
+        let latitude=coordinates[0]
+      let longitude=coordinates[1]
+      for(let i=0;i<latitude.length;i++){
+    new google.maps.Marker({
+      position: {lat: latitude[i], lng: longitude[i]},
+      map: map,
+      title: '{[i]}'
+    });
+  }
+  
         }
         )
 
+      
+        
 
-        });
     </script>
     
     

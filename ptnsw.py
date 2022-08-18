@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask_socketio import SocketIO, emit,send
+from flask_socketio import SocketIO, emit
 import requests 
 from google.transit import gtfs_realtime_pb2
 from requests.structures import CaseInsensitiveDict
@@ -25,7 +25,7 @@ socketio =  SocketIO(app=app,cors_allowed_origins='*')
 
 app.debug = True
 
-@socketio.on('info')
+@socketio.on('connect')
 def event():
    
     resp = requests.get(url,headers=headers)
@@ -40,7 +40,7 @@ def event():
         latitude.append(entity.vehicle.position.latitude)
         longitude.append(entity.vehicle.position.longitude)
     coordinates=[latitude,longitude]
-    send(coordinates)
+    emit('tram',coordinates)
     
 
 @socketio.on('message')
