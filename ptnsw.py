@@ -27,20 +27,20 @@ app.debug = True
 
 @socketio.on('connect')
 def event():
-   
-    resp = requests.get(url,headers=headers)
-    responsebody=resp.content
+    #while socketio.on('connect')==True:
+        resp = requests.get(url,headers=headers)
+        responsebody=resp.content
 
 #Converting protobuf format into object for manipulation 
-    feed = gtfs_realtime_pb2.FeedMessage()
-    feed.ParseFromString(responsebody)
-    latitude=[]
-    longitude=[]
-    for entity in feed.entity:
-        latitude.append(entity.vehicle.position.latitude)
-        longitude.append(entity.vehicle.position.longitude)
-    coordinates=[latitude,longitude]
-    emit('tram',coordinates)
+        feed = gtfs_realtime_pb2.FeedMessage()
+        feed.ParseFromString(responsebody)
+        latitude=[]
+        longitude=[]
+        for entity in feed.entity:
+            latitude.append(entity.vehicle.position.latitude)
+            longitude.append(entity.vehicle.position.longitude)
+        coordinates=[latitude,longitude]
+        emit('tram',coordinates)
     
 
 @socketio.on('message')
