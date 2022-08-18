@@ -38,10 +38,10 @@
       let longitude=coordinates[1]
       for(let i=0;i<latitude.length;i++){
         let num=i+1
-    new google.maps.Marker({
-      position: {lat: latitude[i], lng: longitude[i]},
-      map: map,
-      title: num.toString()
+        new google.maps.Marker({
+          position: {lat: latitude[i], lng: longitude[i]},
+          map: map,
+        title: num.toString()
     });
   }
   
