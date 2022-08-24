@@ -30,51 +30,61 @@
         socket.emit('my event', {data: 'I\'m connected!'});
         
         });
+        
+        function deleteMarkers(){
+              for(i=0; i<markers.length;i++){
+              markers[i].setMap(null);
+              }
+              markers = [];
+              }
 
         const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
         const loop = async () => {
        
        let connected=true
-       let counter=0
+       
        while(connected==true){
-      //marker.setMap(null)
-      if (counter !==0){}
+      
+        
+        let markers=[]
       socket.emit('spawn')
-      counter=counter+1
-      await wait(10000)
-       }
-       
-        }
-      loop()
-        
       socket.on('tram',function(coordinates){
-        let connected=true 
-       
-      console.log(coordinates)
-      
-      
-
-      let latitude=coordinates[0]
-      let longitude=coordinates[1]
-      for(let i=0;i<latitude.length;i++){
         
-
-        let num=i+1
-        const marker=new google.maps.Marker({
-          position: {lat: latitude[i], lng: longitude[i]},
-          map: map,
-        title: num.toString()
+        console.log(coordinates)
+        let latitude=coordinates[0]
+        let longitude=coordinates[1]
         
-    })
-    
-    
+        
+        
+        
+        
+        for(let i=0;i<latitude.length;i++){
+          let marker=new google.maps.Marker({  
+              map: map,      
+                })
 
-    }
-  }
-//}
-  
+            markers.push(marker) 
+          myLatlng=new google.maps.LatLng(latitude[i],longitude[i])
+          markers[i].setPosition(myLatlng)
+          markers[i].setTitle(i.toString())
+          
+          
+        }
+        //socket.emit('points',markers)
+         }
+
         
         )
+
+      
+      await wait(3000)
+      
+
+       }
+      }
+      loop()
+        
+     
 
       
         
