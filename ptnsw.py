@@ -4,6 +4,7 @@ import requests
 from google.transit import gtfs_realtime_pb2
 from requests.structures import CaseInsensitiveDict
 import eventlet
+import time 
 
 
 
@@ -26,27 +27,29 @@ app.debug = True
 
 #SocketIO(app, logger=True, engineio_logger=True, policy_server=False, async_mode='eventlet', manage_session=False, cors_allowed_origins="*")
 
-@socketio.on('connect')
-def event(self):
-    connected=True
-    for x in range(1,10):
-    #while socketio.on('connect')==True:
-        coordinates=[]
-        latitude=[]
-        longitude=[]
-        resp = requests.get(url,headers=headers)
-        responsebody=resp.content
-
-#Converting protobuf format into object for manipulation 
-        feed = gtfs_realtime_pb2.FeedMessage()
-        feed.ParseFromString(responsebody)
-        
-        for entity in feed.entity:
-            latitude.append(entity.vehicle.position.latitude)
-            longitude.append(entity.vehicle.position.longitude)
-        coordinates=[latitude,longitude]
-        emit('tram',coordinates)
+@socketio.on('spawn')
+def event():
     
+    
+   
+    coordinates=[]
+    latitude=[]
+    longitude=[]
+    resp = requests.get(url,headers=headers)
+    responsebody=resp.content
+
+    #Converting protobuf format into object for manipulation 
+    feed = gtfs_realtime_pb2.FeedMessage()
+    feed.ParseFromString(responsebody)
+                
+    for entity in feed.entity:
+        latitude.append(entity.vehicle.position.latitude)
+        longitude.append(entity.vehicle.position.longitude)
+    coordinates=[latitude,longitude]
+                
+    emit('tram',coordinates)
+            
+        
 
 @socketio.on('message')
 def handle_message(data):
