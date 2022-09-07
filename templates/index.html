@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
+    <title>MCAV Public Transport Integration Visualisation</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="shortcut icon" href="#" />
@@ -9,80 +9,73 @@
  
   </head>
   <body>
-    <div id="map"></div>
-    <div id="tram"></div>
+    <div id="map"></div><!--Placeholder for map -->
+ 
   
  
-  <script src="{{url_for('static', filename='js/main.js')}}"></script>
+  <script src="{{url_for('static', filename='js/main.js')}}"></script><!--Connecting html with javascript-->
   
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJcC-iTbiurisPUUqn6dd3LVtadL57XEI&callback=initMap"
-    async defer></script>
+    async defer></script><!--Google Maps API access-->
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"  ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"  ></script><!--Socket.IO access -->
     <script >
   
-      let coordinates='fhewiofhewofieowhfiowefhioewhfiowfhiowefhwiofhwoiefhiowfhewoifheiwofhwiofhwoifhweoifweoifiowfhwiorhwoifeiowfhwiofwhoifhwoifehwoifwihfiowfhio'
-      let coord_temp= document.getElementById('tram').innerHTML
-     coord_temp=coordinates
-      let socket = io('http://localhost:5000');
+      
+      
+     
+      let socket = io('http://localhost:5000');//Initialising socket.IO server
       socket.on('connect', function(){
-        console.log('connected')
+        console.log('connected')//Testing if connection works and shows on terminal 
         socket.emit('my event', {data: 'I\'m connected!'});
-        
         });
         
-        function deleteMarkers(){
-              for(i=0; i<markers.length;i++){
-              markers[i].setMap(null);
-              }
-              markers = [];
-              }
 
-        const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
-        const loop = async () => {
-       
-       let connected=true
-       
-       while(connected==true){
+      function deleteMarkers(){//Deleting old markers and then replacing them with updated data
+          for(i=0; i<markers.length;i++){
+          markers[i].setMap(null);
+          }
+          markers = [];
+          }
+
+      const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+      const loop = async () => {
+        let connected=true
+        while(connected==true){//Creating infinite loop to continously update the data 
       
+        let markers=[]//Initialisng markers
+
+        socket.emit('spawn')//Activating API call from ptnsw.py
+        socket.on('tram',function(coordinates){//From emitting event (spawn) this event (tram) is triggered) 
         
-        let markers=[]
-      socket.emit('spawn')
-      socket.on('tram',function(coordinates){
-        
-        console.log(coordinates)
-        let latitude=coordinates[0]
+        //console.log(coordinates)//Testing if coordinates are present 
+        let latitude=coordinates[0]//Extracting coordinates
         let longitude=coordinates[1]
         
         
-        
-        
-        
-        for(let i=0;i<latitude.length;i++){
+        for(let i=0;i<latitude.length;i++){//Creating all the markers
           let marker=new google.maps.Marker({  
-              map: map,      
-                })
+            map: map,      
+              })
 
             markers.push(marker) 
-          myLatlng=new google.maps.LatLng(latitude[i],longitude[i])
-          markers[i].setPosition(myLatlng)
-          markers[i].setTitle(i.toString())
-          
-          
-        }
-        //socket.emit('points',markers)
-         }
+            myLatlng=new google.maps.LatLng(latitude[i],longitude[i])
+            markers[i].setPosition(myLatlng)
+            markers[i].setTitle(i.toString())
+            }
+       
+          }
 
         
         )
 
       
-      await wait(3000)
+      await wait(1000)//Updating frequency
       
 
        }
       }
-      loop()
+      loop()//Repeating loop 
         
      
 
