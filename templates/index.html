@@ -25,6 +25,7 @@
       
      
       let socket = io('http://localhost:5000');//Initialising socket.IO server
+      const tramicon= 'https://cdn-icons-png.flaticon.com/128/4886/4886433.png'
       socket.on('connect', function(){
         console.log('connected')//Testing if connection works and shows on terminal 
         socket.emit('my event', {data: 'I\'m connected!'});
@@ -62,6 +63,7 @@
             myLatlng=new google.maps.LatLng(latitude[i],longitude[i])
             markers[i].setPosition(myLatlng)
             markers[i].setTitle(i.toString())
+            markers[i].setIcon(tramicon)
             }
        
           }
