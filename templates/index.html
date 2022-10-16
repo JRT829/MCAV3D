@@ -25,7 +25,9 @@
       
      
       let socket = io('http://localhost:5000');//Initialising socket.IO server
-      const tramicon= 'https://cdn-icons-png.flaticon.com/128/4886/4886433.png'
+      const tramicon= 'https://img.icons8.com/cotton/30/000000/tram--v6.png'
+      const busicon= 'https://img.icons8.com/office/16/000000/bus.png'
+      const trainicon= 'https://img.icons8.com/emoji/30/000000/train-emoji.png'
       socket.on('connect', function(){
         console.log('connected')//Testing if connection works and shows on terminal 
         socket.emit('my event', {data: 'I\'m connected!'});
@@ -38,6 +40,24 @@
           }
           markers = [];
           }
+      function deleteMarkers(){//Deleting old markers and then replacing them with updated data
+          for(j=0; j<markers2.length;j++){
+          markers2[j].setMap(null);
+          }
+          markers2 = [];
+          }
+      function deleteMarkers(){//Deleting old markers and then replacing them with updated data
+          for(k=0; k<markers3.length;k++){
+          markers3[k].setMap(null);
+          }
+          markers3 = [];
+          }
+      function deleteMarkers(){//Deleting old markers and then replacing them with updated data
+          for(l=0; l<markers4.length;l++){
+          markers4[l].setMap(null);
+          }
+          markers4 = [];
+          }
 
       const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
       const loop = async () => {
@@ -45,6 +65,7 @@
         while(connected==true){//Creating infinite loop to continously update the data 
       
         let markers=[]//Initialisng markers
+        
 
         socket.emit('spawn')//Activating API call from ptnsw.py
         socket.on('tram',function(coordinates){//From emitting event (spawn) this event (tram) is triggered) 
@@ -64,6 +85,84 @@
             markers[i].setPosition(myLatlng)
             markers[i].setTitle(i.toString())
             markers[i].setIcon(tramicon)
+            }
+       
+          }
+
+        
+        )
+//Tram2 Duplicate
+        let markers2=[]//Initialisng markers
+        socket.emit('spawn')//Activating API call from ptnsw.py
+        socket.on('tram2',function(coordinates2){//From emitting event (spawn) this event (tram) is triggered) 
+        
+        //console.log(coordinates)//Testing if coordinates are present 
+        let latitude2=coordinates2[0]//Extracting coordinates
+        let longitude2=coordinates2[1]
+        
+        
+        for(let j=0;j<latitude2.length;j++){//Creating all the markers
+          let marker2=new google.maps.Marker({  
+            map: map,      
+              })
+
+            markers2.push(marker2) 
+            myLatlng2=new google.maps.LatLng(latitude2[j],longitude2[j])
+            markers2[j].setPosition(myLatlng2)
+            markers2[j].setTitle(j.toString())
+            markers2[j].setIcon(tramicon)
+            }
+       
+          }
+
+        
+        )
+//Bus Duplicate
+        let markers3=[]//Initialisng markers
+        socket.emit('spawn')//Activating API call from ptnsw.py
+        socket.on('bus',function(coordinates3){//From emitting event (spawn) this event (tram) is triggered) 
+        
+        //console.log(coordinates)//Testing if coordinates are present 
+        let latitude3=coordinates3[0]//Extracting coordinates
+        let longitude3=coordinates3[1]
+        
+        
+        for(let k=0;k<latitude3.length;k++){//Creating all the markers
+          let marker3=new google.maps.Marker({  
+            map: map,      
+              })
+
+            markers3.push(marker3) 
+            myLatlng3=new google.maps.LatLng(latitude3[k],longitude3[k])
+            markers3[k].setPosition(myLatlng3)
+            markers3[k].setTitle(k.toString())
+            markers3[k].setIcon(busicon)
+            }
+       
+          }
+
+        
+        )
+//Train Duplicate
+let markers4=[]//Initialisng markers
+        socket.emit('spawn')//Activating API call from ptnsw.py
+        socket.on('train',function(coordinates4){//From emitting event (spawn) this event (tram) is triggered) 
+        
+        //console.log(coordinates)//Testing if coordinates are present 
+        let latitude4=coordinates4[0]//Extracting coordinates
+        let longitude4=coordinates4[1]
+        
+        
+        for(let l=0;l<latitude4.length;l++){//Creating all the markers
+          let marker4=new google.maps.Marker({  
+            map: map,      
+              })
+
+            markers4.push(marker4) 
+            myLatlng4=new google.maps.LatLng(latitude4[l],longitude4[l])
+            markers4[l].setPosition(myLatlng4)
+            markers4[l].setTitle(l.toString())
+            markers4[l].setIcon(trainicon)
             }
        
           }
