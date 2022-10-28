@@ -10,5 +10,7 @@ function initMap() {
     zoom: 14
   });
   
-  
+  const transitLayer = new google.maps.TransitLayer();
+
+  transitLayer.setMap(map);
 }
