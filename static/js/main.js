@@ -9,7 +9,7 @@ function initMap() {
     center: {lat:-33.8836784362793 , lng: 151.20750427246094},
     zoom: 14,
     mapId: '5c34562cb4a2c954',
-    tilt: 45,
+    tilt: 50,
     heading:180
   });
   
@@ -17,8 +17,8 @@ function initMap() {
 
   transitLayer.setMap(map);
   // Create a WebGL Overlay View instance.
-const webglOverlayView = new google.maps.WebGLOverlayView();
+//const webglOverlayView = new google.maps.WebGLOverlayView();
 
 // Add the overlay to the map.
-webglOverlayView.setMap(map);
+//webglOverlayView.setMap(map);
 }

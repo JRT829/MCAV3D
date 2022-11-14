@@ -30,7 +30,7 @@
       const tramicon= 'https://img.icons8.com/cotton/30/000000/tram--v6.png'
       const busicon= 'https://img.icons8.com/office/16/000000/bus.png'
       const trainicon= 'https://img.icons8.com/emoji/30/000000/train-emoji.png'
-      let iconlist=[tramicon,tramicon]
+      let iconlist=[tramicon,busicon]
       socket.on('connect', function(){
         console.log('connected')//Testing if connection works and shows on terminal 
         socket.emit('my event', {data: 'I\'m connected!'});
@@ -91,7 +91,7 @@
             }
        
           }
-
+          k=0
         }
         )
 
