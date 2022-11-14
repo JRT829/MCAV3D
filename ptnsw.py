@@ -14,11 +14,8 @@ headers['Authorization']="apikey PtFM8NeyUIGV6RS5hwTWOGiyC2IINOTtHxZz"
 #Different transport options
 url="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/lightrail/cbdandsoutheast"
 url2="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/lightrail/innerwest"
-url3="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/buses"
-url4="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/sydneytrains"
-#url="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/ferries/sydneyferries"
-#url="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/sydneytrains"
-#url="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/lightrail/buses"
+url3="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/sydneytrains"
+
 
 
 #App settings 
@@ -26,7 +23,7 @@ app = Flask(__name__)
 app.config['SECRET KEY']='mysecret'
 socketio =  SocketIO(app,cors_allowed_origins="*")
 app.debug = True
-urllist=[url,url2,url3,url4]
+urllist=[url,url2]
 
 #SocketIO(app, logger=True, engineio_logger=True, policy_server=False, async_mode='eventlet', manage_session=False, cors_allowed_origins="*")
 
@@ -39,6 +36,7 @@ def event():
         info=[]
         latitude=[]
         longitude=[]
+        routeid=[]
     
 
         #Making the request
@@ -55,7 +53,8 @@ def event():
         for entity in feed.entity:
             latitude.append(entity.vehicle.position.latitude)
             longitude.append(entity.vehicle.position.longitude)
-        info=[latitude,longitude]
+            routeid.append(entity.vehicle.trip.route_id)
+        info=[latitude,longitude,routeid]
 
         data.append(info)
         

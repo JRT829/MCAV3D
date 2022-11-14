@@ -19,6 +19,8 @@
     async defer></script><!--Google Maps API access-->
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"  ></script><!--Socket.IO access -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js" ></script>
     <script >
   
       
@@ -28,7 +30,7 @@
       const tramicon= 'https://img.icons8.com/cotton/30/000000/tram--v6.png'
       const busicon= 'https://img.icons8.com/office/16/000000/bus.png'
       const trainicon= 'https://img.icons8.com/emoji/30/000000/train-emoji.png'
-      let iconlist=[tramicon,tramicon,busicon,trainicon]
+      let iconlist=[tramicon,tramicon]
       socket.on('connect', function(){
         console.log('connected')//Testing if connection works and shows on terminal 
         socket.emit('my event', {data: 'I\'m connected!'});
@@ -57,11 +59,17 @@
         //console.log(coordinates)//Testing if coordinates are present 
         let latitude=data[k][0]//Extracting coordinates
         let longitude=data[k][1]
+        let routeid=data[k][2]
         
         
         for(let i=0;i<latitude.length;i++){//Creating all the markers
+          let infowindow = new google.maps.InfoWindow({
+                  content: routeid[i],
+                  ariaLabel:routeid[i] ,
+                  });
           let marker=new google.maps.Marker({  
-            map: map,      
+            map: map,
+            title:routeid[i]      
               })
 
             markers.push(marker) 
@@ -69,6 +77,17 @@
             markers[i].setPosition(myLatlng)
             markers[i].setTitle(i.toString())
             markers[i].setIcon(iconlist[k])
+            marker.addListener("mouseover", () => {
+                infowindow.open({
+                anchor: marker,
+                map,
+                });
+            });
+            marker.addListener('mouseout', function() {
+                infowindow.close();
+                });
+
+
             }
        
           }
