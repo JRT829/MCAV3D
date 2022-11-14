@@ -5,7 +5,7 @@ from requests.structures import CaseInsensitiveDict
 #API access
 headers=CaseInsensitiveDict()
 headers['Authorization']="apikey PtFM8NeyUIGV6RS5hwTWOGiyC2IINOTtHxZz"
-url="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/lightrail/cbdandsoutheast"
+url="https://api.transport.nsw.gov.au/v1/gtfs/vehiclepos/lightrail/innerwest"
 resp = requests.get(url,headers=headers)
 responsebody=resp.content
 
