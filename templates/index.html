@@ -16,52 +16,34 @@
   <script src="{{url_for('static', filename='js/main.js')}}"></script><!--Connecting html with javascript-->
   
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJcC-iTbiurisPUUqn6dd3LVtadL57XEI&callback=initMap"
-    async defer></script><!--Google Maps API access-->
+   ></script><!--Google Maps API access-->
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"  ></script><!--Socket.IO access -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js" ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marker-animate-unobtrusive/0.2.8/vendor/markerAnimate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marker-animate-unobtrusive/0.2.8/SlidingMarker.min.js"></script>
     <script >
   
       
-      
      
       let socket = io('http://localhost:5000');//Initialising socket.IO server
-      const tramicon= 'https://img.icons8.com/cotton/30/000000/tram--v6.png'
+      const tramicons= 'https://img.icons8.com/cotton/30/000000/tram--v6.png'
+      const tramicon= 'https://www.simpleimageresizer.com/_uploads/photos/c8c92c24/tram_64x64.png'
       const busicon= 'https://img.icons8.com/office/16/000000/bus.png'
       const trainicon= 'https://img.icons8.com/emoji/30/000000/train-emoji.png'
-      let iconlist=[tramicon,tramicon]
-      socket.on('connect', function(){
-        console.log('connected')//Testing if connection works and shows on terminal 
-        socket.emit('my event', {data: 'I\'m connected!'});
-        });
-        
-
-      function deleteMarkers(markers){
+      const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-rail-in-sydney-transport-for-nsw-lilyfield-travel-miscellaneous-text-thumbnail.png' 
+      let l=0
+      let iconlist=[tramicons,tramicons,trainicon]
       
-        for(let i=0; i<markers.length;i++){
-          markers[i].setMap(null);
-          }
-          markers = [];
-          
-          
-          }
-        
      
+        
 
-      const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms))
-      const loop = async () => {
-        let connected=true
-        while(connected==true){//Creating infinite loop to continously update the data 
       
         let markers=[]//Initialisng markers
-        
-
         socket.emit('spawn')//Activating API call from ptnsw.py
-        socket.on('data',function(data){//From emitting event (spawn) this event (tram) is triggered) 
-        setTimeout(deleteMarkers(markers),5000)
+        socket.once('data',function(data){//From emitting event (spawn) this event (tram) is triggered) 
+        
         for(let i=0;i<data.length;i++){
-          
+        let markerstemp=[]
         //console.log(coordinates)//Testing if coordinates are present 
         let latitude=data[i][0]//Extracting coordinates
         let longitude=data[i][1]
@@ -71,7 +53,7 @@
         for(let j=0;j<routeid.length;j++){//Creating all the markers
           let myLatlng=new google.maps.LatLng(latitude[j],longitude[j])
           let infowindow = new google.maps.InfoWindow({
-                  content: routeid[j],
+                  content: '<h1 id="firstHeading" class="firstHeading">'+String(routeid[j])+'</h1>'+'<img src='+lightrail+">" ,
                   });
           let marker=new google.maps.Marker({  
             map: map,
@@ -90,29 +72,46 @@
             marker.addListener('mouseout', function() {
                 infowindow.close();
                 });
-            markers.push(marker) 
+            markerstemp.push(marker) 
 
             
                 
             }
+            markers.push(markerstemp)
             
             
+          }
+          l++
+        }
+        )
+        function replaceMarkers(markers){
+        socket.emit('spawn')//Activating API call from ptnsw.py
+        socket.on('data',function(data){//From emitting event (spawn) this event (tram) is triggered) 
+        console.log(markers)
+        for(let i=0;i<data.length;i++){
+        
+        //console.log(coordinates)//Testing if coordinates are present 
+        let latitude=data[i][0]//Extracting coordinates
+        let longitude=data[i][1]
+        
+        for(let j=0;j<latitude.length;j++){//Creating all the markers
+          let myLatlng=new google.maps.LatLng(latitude[j],longitude[j])
+          let markertemp=markers[i]
+            markertemp[j].setPosition(myLatlng)
+            
+            }
+          
           }
           
         }
         )
-        
-      
-      await wait(5000)//Updating frequency
-      
-      
-      console.log(markers)
+        }
 
-       }
-      }
-      loop()//Repeating loop 
-        
-     
+        if(l=1){
+        setInterval(replaceMarkers,5000,markers)
+        }
+
+
 
       
         

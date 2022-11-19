@@ -23,7 +23,7 @@ app = Flask(__name__)
 app.config['SECRET KEY']='mysecret'
 socketio =  SocketIO(app,cors_allowed_origins="*")
 app.debug = True
-urllist=[url2,url]
+urllist=[url,url2,url3]
 
 #SocketIO(app, logger=True, engineio_logger=True, policy_server=False, async_mode='eventlet', manage_session=False, cors_allowed_origins="*")
 
