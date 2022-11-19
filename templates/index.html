@@ -31,7 +31,7 @@
       const busicon= 'https://img.icons8.com/office/16/000000/bus.png'
       const trainicon= 'https://img.icons8.com/emoji/30/000000/train-emoji.png'
       const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-rail-in-sydney-transport-for-nsw-lilyfield-travel-miscellaneous-text-thumbnail.png' 
-      let l=0
+     
       let iconlist=[tramicons,tramicons,trainicon]
       
      
@@ -81,13 +81,12 @@
             
             
           }
-          l++
+          
         }
         )
         function replaceMarkers(markers){
         socket.emit('spawn')//Activating API call from ptnsw.py
         socket.on('data',function(data){//From emitting event (spawn) this event (tram) is triggered) 
-        console.log(markers)
         for(let i=0;i<data.length;i++){
         
         //console.log(coordinates)//Testing if coordinates are present 
@@ -107,9 +106,9 @@
         )
         }
 
-        if(l=1){
-        setInterval(replaceMarkers,5000,markers)
-        }
+        
+        setInterval(replaceMarkers,2000,markers)
+        
 
 
 
