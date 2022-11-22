@@ -85,4 +85,10 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
   }
 
   //Repeating the update function for continous updates 
+  try{
   setInterval(replaceMarkers,2000,markers)
+  }
+catch(e){
+  console.log(e)
+ setInterval(replaceMarkers,2000,markers)
+}
