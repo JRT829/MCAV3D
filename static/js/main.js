@@ -1,24 +1,14 @@
 
-let map;
+mapboxgl.accessToken = 'pk.eyJ1IjoianRheTAwNTEiLCJhIjoiY2xhdjBnZXVtMDEzejNubG1nZ21hN3VjMiJ9.H7P1__12c75cLxmNEj6Zug';
+const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v12', // style URL
+    center: [151.20750427246094,-33.8836784362793], // starting position [lng, lat]
+    zoom: 9 ,// starting zoom
+    pitch: 60,
+antialias: true // create the gl context with MSAA antialiasing, so custom layers are antialiased,
+});
 
 
+//[-33.8836784362793 , 151.20750427246094],
 
-function initMap() {
-  
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat:-33.8836784362793 , lng: 151.20750427246094},
-    zoom: 14,
-    mapId: '5c34562cb4a2c954',
-    tilt: 50,
-    heading:180
-  });
-  
-  const transitLayer = new google.maps.TransitLayer();
-
-  transitLayer.setMap(map);
-  // Create a WebGL Overlay View instance.
-//const webglOverlayView = new google.maps.WebGLOverlayView();
-
-// Add the overlay to the map.
-//webglOverlayView.setMap(map);
-}

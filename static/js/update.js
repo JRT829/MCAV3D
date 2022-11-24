@@ -28,28 +28,13 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
     //Looping for each individual vehicle in that vehicle type
       for(let j=0;j<routeid.length;j++){
         //Converting coordinates into google compatible coordinates
-        let myLatlng=new google.maps.LatLng(latitude[j],longitude[j])
+        let myLngLat=new mapboxgl.LngLat(longitude[j],latitude[j])
         //Creating info window(DO THIS PART)
-        let infowindow = new google.maps.InfoWindow({
-            content: '<h1 id="firstHeading" class="firstHeading">'+String(routeid[j])+'</h1>'+'<img src='+lightrail+">" ,
-            });
+        
         //Creating the marker
-        let marker=new google.maps.Marker({  
-          map: map,
-          title:j.toString(),    
-          position: myLatlng,
-          icon:iconlist[i]
-          })
-        //Making the infowindow appear on mouseover
-        marker.addListener("mouseover", () => {
-          infowindow.open({
-          anchor: marker,
-          map,
-            });
-          });
-      marker.addListener('mouseout', function() {
-          infowindow.close();
-          });
+        let marker=new mapboxgl.Marker({})
+        marker.setLngLat(myLngLat)
+        marker.addTo(map)
       //Pushing marker in temporary array to segregate vehicle types   
       markerstemp.push(marker) 
       }
@@ -73,11 +58,11 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
         //Looping for each individual vehicle 
         for(let j=0;j<latitude.length;j++){//Creating all the markers
             //Converting coordinates into google compatible coordinates 
-             let myLatlng=new google.maps.LatLng(latitude[j],longitude[j])
+            let myLngLat=new mapboxgl.LngLat(longitude[j],latitude[j])
             //Extracting vehicle type array from the master marker array
              let markersub=markers[i]
             //Setting and changing to the new position of that vehicle
-             markersub[j].setPosition(myLatlng) 
+             markersub[j].setLngLat(myLngLat)
              } 
         }
     
