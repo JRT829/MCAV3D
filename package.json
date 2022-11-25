@@ -2,6 +2,8 @@
   "dependencies": {
     "marker-animate-unobtrusive": "^0.2.9",
     "socket.io": "^4.5.1",
-    "socket.io-client": "^4.5.1"
+    "socket.io-client": "^4.5.1",
+    "three": "^0.146.0",
+    "threebox-plugin": "^2.2.7"
   }
 }

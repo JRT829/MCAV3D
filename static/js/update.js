@@ -61,8 +61,13 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
             let myLngLat=new mapboxgl.LngLat(longitude[j],latitude[j])
             //Extracting vehicle type array from the master marker array
              let markersub=markers[i]
+             //preLng=markersub[j].getLngLat().lng 
+             //preLat=markersub[j].getLngLat().lat
             //Setting and changing to the new position of that vehicle
+            
              markersub[j].setLngLat(myLngLat)
+            
+            //requestAnimationFrame(markersub[j].setLngLat(myLngLat));
              } 
         }
     
