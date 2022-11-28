@@ -93,67 +93,33 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
             //Converting coordinates into google compatible coordinates 
             let myLngLat=new mapboxgl.LngLat(longitude[j],latitude[j])
              
-             vehicle=model[i][j]
-             origin=coord[i][j]
-             destination=[longitude[j],latitude[j]]
-             /*if(destination==undefined){
-              destination=origin
-              travelPath(origin,destination,vehicle) 
-             }else{
-             travelPath(origin,destination,vehicle) 
-             }*/
-             model[i][j].setCoords([longitude[j],latitude[j]])
-             tb.update()
+             let vehicle=model[i][j]
+             let origin=coord[i][j]
+             let destination=[longitude[j],latitude[j]]
+             let options = {
+              path: [origin,destination],
+              duration: 5000,
+              
+            }
+             model[i][j].followPath(options,function() {
+              tb.update();
+
+              
+            })
+             //model[i][j].setCoords([longitude[j],latitude[j]])
+             //tb.update()
              
+             coord[i].splice(j,1,destination)
             
-            //requestAnimationFrame(markersub[j].setLngLat(myLngLat));
+            
              } 
         }
     
     })
   }
 
-  function travelPath(origin,destination,vehicle){
-
-    // request directions. See https://docs.mapbox.com/api/navigation/#directions for details
-
-    var url = "https://api.mapbox.com/directions/v5/mapbox/driving/"+[origin, destination].join(';')+"?geometries=geojson&access_token=" + mapboxgl.accessToken
-
-
-    fetchFunction(url, function(data){
-
-      // extract path geometry from callback geojson, and set duration of travel
-      var options = {
-        path: data.routes[0].geometry.coordinates,
-        duration: 2000
-      }
-
-      // start the truck animation with above options, and remove the line when animation ends
-      vehicle.followPath(
-        options,
-      );
-
-      // set destination as the new origin, for the next trip
-      tb.update();
-
-    })
-  }
   
-  //convenience function for fetch
 
-  function fetchFunction(url, cb) {
-    fetch(url)
-      .then(
-        function(response){
-          if (response.status === 200) {
-            response.json()
-              .then(function(data){
-                data//cb(data) works for like a second before going haywire
-              })
-          }
-        }
-      )
-  }
 
   //Repeating the update function for continous updates 
   try{
