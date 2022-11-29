@@ -21,12 +21,29 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
     { defaultLights: true }
   );
   map.on('style.load', function() {
+    map.addSource('route', {
+      type: 'geojson',
+      data: 'static/js/innerwest.geojson'
+      });
+      map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+        'line-join': 'round',
+        'line-cap': 'round'
+        },
+        'paint': {
+        'line-color': '#888',
+        'line-width': 8
+        }
+        });
   map.addLayer({
     id: 'custom_layer',
     type: 'custom',
     renderingMode: '3d',
     onAdd: function (map, gl) {
-      socket.emit('spawn')//Activating API call from ptnsw.py
+  socket.emit('spawn')//Activating API call from ptnsw.py
   socket.once('data',function(data){
     //Looping each type of vehicle
     for(let i=0;i<data.length;i++){
