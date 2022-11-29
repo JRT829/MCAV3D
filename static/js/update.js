@@ -113,16 +113,19 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
              let vehicle=model[i][j]
              let origin=coord[i][j]
              let destination=[longitude[j],latitude[j]]
-             let options = {
+             
+            if (destination==undefined){
+              destination=origin
+            }
+            let options = {
               path: [origin,destination],
               duration: 5000,
               
             }
              model[i][j].followPath(options,function() {
               tb.update();
-
-              
             })
+          
              //model[i][j].setCoords([longitude[j],latitude[j]])
              //tb.update()
              
