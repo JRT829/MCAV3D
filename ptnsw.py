@@ -74,7 +74,7 @@ def route():
     return render_template('index.html')
 #Creating local server 
 if __name__ == "__main__":
-    eventlet.monkey_patch()
+    
     eventlet.wsgi.server(eventlet.listen(('127.0.0.1', 5000)), app)
    
 

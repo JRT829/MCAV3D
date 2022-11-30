@@ -21,14 +21,14 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
     { defaultLights: true }
   );
   map.on('style.load', function() {
-    map.addSource('route', {
+    map.addSource('innerwest', {
       type: 'geojson',
       data: 'static/js/innerwest.geojson'
       });
       map.addLayer({
-        'id': 'route',
+        'id': 'innerwest',
         'type': 'line',
-        'source': 'route',
+        'source': 'innerwest',
         'layout': {
         'line-join': 'round',
         'line-cap': 'round'
@@ -38,6 +38,26 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
         'line-width': 8
         }
         });
+        map.addSource('cbdandsoutheast', {
+          type: 'geojson',
+          data: 'static/js/cbdandsoutheast.geojson'
+          });
+          map.addLayer({
+            'id': 'cbdandsoutheast',
+            'type': 'line',
+            'source': 'cbdandsoutheast',
+            'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+            },
+            'paint': {
+            'line-color': '#888',
+            'line-width': 8
+            }
+            });
+    
+
+
   map.addLayer({
     id: 'custom_layer',
     type: 'custom',
