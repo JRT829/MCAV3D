@@ -15,6 +15,7 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
   let markers=[]
   let model=[]
   let coord=[]
+  let colors=[0x660000,0x073763]
   window.tb = new Threebox(
     map,
     map.getCanvas().getContext('webgl'), //get the context from the map canvas
@@ -34,7 +35,7 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
         'line-cap': 'round'
         },
         'paint': {
-        'line-color': '#888',
+        'line-color': '#073763',
         'line-width': 8
         }
         });
@@ -51,7 +52,7 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
             'line-cap': 'round'
             },
             'paint': {
-            'line-color': '#888',
+            'line-color': '#660000',
             'line-width': 8
             }
             });
@@ -80,7 +81,7 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
         //Converting coordinates into google compatible coordinates
         let myLngLat=new mapboxgl.LngLat(longitude[j],latitude[j])
         var geometry = new THREE.BoxGeometry(30, 30, 30);
-      let cube = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0x660000 }));
+      let cube = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: colors[i] }));
       cube = tb.Object3D({ obj: cube, units: 'meters' });
       cube.setCoords([longitude[j],latitude[j]]);
       tb.add(cube);
