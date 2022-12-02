@@ -12,16 +12,68 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
 
 //Initial variables 
   let iconlist=[tramicons,tramicons]
-  let markers=[]
   let model=[]
   let coord=[]
+  let bear=[]
   let colors=[0x660000,0x073763]
   window.tb = new Threebox(
     map,
     map.getCanvas().getContext('webgl'), //get the context from the map canvas
     { defaultLights: true }
   );
+  
   map.on('style.load', function() {
+      // Insert the layer beneath any symbol layer.
+const layers = map.getStyle().layers;
+const labelLayerId = layers.find(
+(layer) => layer.type === 'symbol' && layer.layout['text-field']
+).id;
+ 
+// The 'building' layer in the Mapbox Streets
+// vector tileset contains building height data
+// from OpenStreetMap.
+map.addLayer(
+{
+'id': 'add-3d-buildings',
+'source': 'composite',
+'source-layer': 'building',
+'filter': ['==', 'extrude', 'true'],
+'type': 'fill-extrusion',
+'minzoom': 15,
+'paint': {
+'fill-extrusion-color': '#aaa',
+ 
+// Use an 'interpolate' expression to
+// add a smooth transition effect to
+// the buildings as the user zooms in.
+'fill-extrusion-height': [
+'interpolate',
+['linear'],
+['zoom'],
+15,
+0,
+15.05,
+['get', 'height']
+],
+'fill-extrusion-base': [
+'interpolate',
+['linear'],
+['zoom'],
+15,
+0,
+15.05,
+['get', 'min_height']
+],
+'fill-extrusion-opacity': 0.6
+}
+},
+labelLayerId
+    );
+
+
+
+
+
     map.addSource('innerwest', {
       type: 'geojson',
       data: 'static/js/innerwest.geojson'
@@ -72,19 +124,38 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
     let markerstemp=[]
     let modeltemp=[]
     let coordtemp=[]
+    let bearingtemp=[]
     //Extracting coordinate and route data
     let latitude=data[i][0]
     let longitude=data[i][1]
-    let routeid=data[i][2]
+    let bearing=data[i][2]
+    let routeid=data[i][3]
     //Looping for each individual vehicle in that vehicle type
       for(let j=0;j<routeid.length;j++){
         //Converting coordinates into google compatible coordinates
-        let myLngLat=new mapboxgl.LngLat(longitude[j],latitude[j])
-        var geometry = new THREE.BoxGeometry(30, 30, 30);
+       
+      //cube
+
+      /*var geometry = new THREE.BoxGeometry(1, 1, 1);
       let cube = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: colors[i] }));
       cube = tb.Object3D({ obj: cube, units: 'meters' });
-      cube.setCoords([longitude[j],latitude[j]]);
-      tb.add(cube);
+      let options={
+        coords:[longitude[j],latitude[j]],
+        rotation:[0,0,bearing[j]]
+      }
+      cube.set(options)
+      cube.setCoords([longitude[j],latitude[j]]);*/
+      sphereTemplate = tb.sphere(
+        {
+            radius: 0.5,
+            units: 'meters',
+            sides: 120,
+            color: colors[i],
+            material: 'MeshPhysicalMaterial'
+        }
+    )
+      tb.add(sphereTemplate);
+      
 
        
         
@@ -92,16 +163,18 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
        
       //Pushing marker in temporary array to segregate vehicle types   
       
-      modeltemp.push(cube)
+      modeltemp.push(sphereTemplate)
       coordtemp.push([longitude[j],latitude[j]])
+      bearingtemp.push(bearing[j])
       
       }
       //Pushing array in overall marker array
       
       model.push(modeltemp)
       coord.push(coordtemp)
+      bear.push(bearingtemp)
     } 
-    console.log(model)
+    console.log(bear)
   })
       
     },
@@ -111,9 +184,23 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
   });
 })
 //First iteration
-  //From emitting event (spawn), api data is extracted from api call and triggers (tram) event which sends the data to the index.html side
   
+ // INFO WINDO NOT WORKING
+ map.on('mouseover',(e)=>{
+  // calculate objects intersecting the picking ray
+  var intersect = tb.queryRenderedFeatures(e.point)[0]
+  var intersectionExists = typeof intersect == "object"
+  if (intersect){
+    var nearestObject = intersect.object;
+    nearestObject.color =0xaaffaa ;
+  }
+ })
 
+
+
+
+
+ 
   //Updating function 
   function replaceMarkers(coord,model){
     //Repeating api data retrieval process by doing the same event calling 
@@ -125,25 +212,34 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
         //Extracting coordinates
         let latitude=data[i][0]
         let longitude=data[i][1]
+        let bearing=data[i][2]
         
         //Looping for each individual vehicle 
         for(let j=0;j<latitude.length;j++){//Creating all the markers
             //Converting coordinates into google compatible coordinates 
-            let myLngLat=new mapboxgl.LngLat(longitude[j],latitude[j])
+            
              
              let vehicle=model[i][j]
              let origin=coord[i][j]
              let destination=[longitude[j],latitude[j]]
-             
-            if (destination==undefined){
+             let initialbear=bear[i][j]
+             let finalbear=bearing[j]
+            if (destination==undefined||finalbear==undefined){
               destination=origin
+              finalbear==initialbear
             }
             let options = {
               path: [origin,destination],
-              duration: 5000,
+              duration: 3000,
+              trackHeading:true
               
             }
+            let cubeoptions={
+              rotation:[0,0,finalbear]
+            }
              model[i][j].followPath(options,function() {
+              
+              //model[i][j].set(cubeoptions)
               tb.update();
             })
           
@@ -164,9 +260,9 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
 
   //Repeating the update function for continous updates 
   try{
-  setInterval(replaceMarkers,5000,coord,model)
+  setInterval(replaceMarkers,3000,coord,model)
   }
 catch(e){
   console.log(e)
- setInterval(replaceMarkers,5000,coord,model)
+ setInterval(replaceMarkers,3000,coord,model)
 }
