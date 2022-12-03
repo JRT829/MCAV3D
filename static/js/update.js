@@ -15,6 +15,7 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
   let model=[]
   let coord=[]
   let bear=[]
+  let route=[]
   let colors=[0x660000,0x073763]
   window.tb = new Threebox(
     map,
@@ -72,8 +73,8 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
     //Looping each type of vehicle
     for(let i=0;i<data.length;i++){
     //Initial variable for that vehicle 
-    let markerstemp=[]
     let modeltemp=[]
+    let routetemp=[]
     let coordtemp=[]
     let bearingtemp=[]
     //Extracting coordinate and route data
@@ -117,6 +118,7 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
       modeltemp.push(sphereTemplate)
       coordtemp.push([longitude[j],latitude[j]])
       bearingtemp.push(bearing[j])
+      routetemp.push(routeid[j])
       
       }
       //Pushing array in overall marker array
@@ -124,6 +126,7 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
       model.push(modeltemp)
       coord.push(coordtemp)
       bear.push(bearingtemp)
+      route.push(routetemp)
     } 
     console.log(model)
   })
@@ -205,7 +208,7 @@ labelLayerId
               console.log('the id is'+modelID)
               const popup = new mapboxgl.Popup({ closeOnClick: false })
                       .setLngLat(coord[i][j])
-                      .setHTML('<h1>Hello World!</h1>')
+                      .setHTML('<h1>'+route[i][j]+'</h1>')
                       .addTo(map);
             }
           
