@@ -23,56 +23,7 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
   );
   
   map.on('style.load', function() {
-      // Insert the layer beneath any symbol layer.
-const layers = map.getStyle().layers;
-const labelLayerId = layers.find(
-(layer) => layer.type === 'symbol' && layer.layout['text-field']
-).id;
- 
-// The 'building' layer in the Mapbox Streets
-// vector tileset contains building height data
-// from OpenStreetMap.
-map.addLayer(
-{
-'id': 'add-3d-buildings',
-'source': 'composite',
-'source-layer': 'building',
-'filter': ['==', 'extrude', 'true'],
-'type': 'fill-extrusion',
-'minzoom': 15,
-'paint': {
-'fill-extrusion-color': '#aaa',
- 
-// Use an 'interpolate' expression to
-// add a smooth transition effect to
-// the buildings as the user zooms in.
-'fill-extrusion-height': [
-'interpolate',
-['linear'],
-['zoom'],
-15,
-0,
-15.05,
-['get', 'height']
-],
-'fill-extrusion-base': [
-'interpolate',
-['linear'],
-['zoom'],
-15,
-0,
-15.05,
-['get', 'min_height']
-],
-'fill-extrusion-opacity': 0.6
-}
-},
-labelLayerId
-    );
-
-
-
-
+      
 
     map.addSource('innerwest', {
       type: 'geojson',
@@ -174,7 +125,7 @@ labelLayerId
       coord.push(coordtemp)
       bear.push(bearingtemp)
     } 
-    console.log(bear)
+    console.log(model)
   })
       
     },
@@ -182,22 +133,90 @@ labelLayerId
       tb.update(); //update Threebox scene
     }
   });
+
+  // Insert the layer beneath any symbol layer.
+const layers = map.getStyle().layers;
+const labelLayerId = layers.find(
+(layer) => layer.type === 'symbol' && layer.layout['text-field']
+).id;
+ 
+// The 'building' layer in the Mapbox Streets
+// vector tileset contains building height data
+// from OpenStreetMap.
+map.addLayer(
+{
+'id': 'add-3d-buildings',
+'source': 'composite',
+'source-layer': 'building',
+'filter': ['==', 'extrude', 'true'],
+'type': 'fill-extrusion',
+'minzoom': 15,
+'paint': {
+'fill-extrusion-color': '#aaa',
+ 
+// Use an 'interpolate' expression to
+// add a smooth transition effect to
+// the buildings as the user zooms in.
+'fill-extrusion-height': [
+'interpolate',
+['linear'],
+['zoom'],
+15,
+0,
+15.05,
+['get', 'height']
+],
+'fill-extrusion-base': [
+'interpolate',
+['linear'],
+['zoom'],
+15,
+0,
+15.05,
+['get', 'min_height']
+],
+'fill-extrusion-opacity': 0.6
+}
+},
+labelLayerId
+    );
+
+
+
+
 })
 //First iteration
   
  // INFO WINDO NOT WORKING
- map.on('mouseover',(e)=>{
+ map.on('click',(e)=>{
   // calculate objects intersecting the picking ray
   var intersect = tb.queryRenderedFeatures(e.point)[0]
-  var intersectionExists = typeof intersect == "object"
-  if (intersect){
-    var nearestObject = intersect.object;
-    nearestObject.color =0xaaffaa ;
+  //console.log(intersect)
+  if (typeof intersect.object =='object'){
+    console.log(intersect.object)
+    let clickedID=intersect.object.parent.uuid
+    console.log(intersect.object.parent.uuid)
+    for(let i=0;i<colors.length;i++){    
+      
+      //Looping for each individual vehicle 
+      for(let j=0;j<model[i].length;j++){//Creating all the markers
+            let modelID=model[i][j].uuid
+            if(modelID==clickedID){
+              console.log('the id is'+modelID)
+              const popup = new mapboxgl.Popup({ closeOnClick: false })
+                      .setLngLat(coord[i][j])
+                      .setHTML('<h1>Hello World!</h1>')
+                      .addTo(map);
+            }
+          
+           } 
+      }
   }
+  
  })
 
 
-
+ 
 
 
  
