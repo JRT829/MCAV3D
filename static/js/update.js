@@ -209,14 +209,22 @@ labelLayerId
             let modelID=model[i][j].uuid
             if(modelID==clickedID){
               console.log('the id is'+modelID)
-              const popup = new mapboxgl.Popup({ closeOnClick: false })
+              socket.emit('stop',stops[i][j])
+              let popup = new mapboxgl.Popup({ closeOnClick: true })
                       .setLngLat(coord[i][j])
-                      .setHTML('<h3 id="firstHeading" class="firstHeading">'+String(vehicletype[i])+' to: '+String(stops[i][j])+' </h3>' +
+              socket.once('stopcall',function(station){
+              
+                      popup.setHTML('<h3 id="firstHeading" class="firstHeading">'+String(vehicletype[i])+' to: '+station+' </h3>' +
                       '<div id="bodyContent">' +
                       '<p>Route ID: '+String(route[i][j])+' </p>' +
                       '<p>Coordinates: '+String(coord[i][j][0])+' , '+String(coord[i][j][1])+' </p>' +
                       '<img src= '+logolist[i]+">" )
-                      .addTo(map);
+                     
+
+                      
+              })
+              popup.addTo(map);
+              
             }
           
            } 

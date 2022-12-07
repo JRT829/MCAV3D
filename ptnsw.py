@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit
 import requests 
 from google.transit import gtfs_realtime_pb2
 from requests.structures import CaseInsensitiveDict
+import json
 import eventlet
 #Server with API data
 
@@ -68,7 +69,15 @@ def event():
     #Sending data to client(index.html)            
     emit('data',data)
     
-            
+@socketio.on('stop')
+def handlestop(stopid):
+    requesturl='https://api.transport.nsw.gov.au/v1/tp/stop_finder?outputFormat=rapidJSON&type_sf=stop&name_sf='+str(stopid)+'&coordOutputFormat=EPSG%3A4326&TfNSWSF=true&version=10.2.1.42'
+    req = requests.get(requesturl,headers=headers)
+    reqcontent=req.content
+    jsonResponse = json.loads(reqcontent.decode('utf-8'))
+    station=jsonResponse['locations'][0]['name']
+    emit('stopcall',station)
+
         
     
     
