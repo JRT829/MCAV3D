@@ -8,15 +8,18 @@ const tramicons= 'https://img.icons8.com/cotton/30/000000/tram--v6.png'
 const busicon= 'https://img.icons8.com/office/16/000000/bus.png'
 const trainicon= 'https://img.icons8.com/emoji/30/000000/train-emoji.png'
 const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-rail-in-sydney-transport-for-nsw-lilyfield-travel-miscellaneous-text-thumbnail.png' 
-
+const lightraillogo='https://i.ibb.co/qx2kPJg/pngwing-com-1.png'
+const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
 
 //Initial variables 
   let iconlist=[tramicons,tramicons]
+  let logolist=[lightraillogo,lightraillogo]
   let model=[]
   let coord=[]
-  let bear=[]
+  let stops=[]
   let route=[]
   let colors=[0x660000,0x073763]
+  let vehicletype = ['Light Rail','Light Rail']
   window.tb = new Threebox(
     map,
     map.getCanvas().getContext('webgl'), //get the context from the map canvas
@@ -76,12 +79,12 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
     let modeltemp=[]
     let routetemp=[]
     let coordtemp=[]
-    let bearingtemp=[]
+    let stoptemp=[]
     //Extracting coordinate and route data
     let latitude=data[i][0]
     let longitude=data[i][1]
-    let bearing=data[i][2]
-    let routeid=data[i][3]
+    let routeid=data[i][2]
+    let stopid=data[i][3]
     //Looping for each individual vehicle in that vehicle type
       for(let j=0;j<routeid.length;j++){
         //Converting coordinates into google compatible coordinates
@@ -117,15 +120,15 @@ const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-
       
       modeltemp.push(sphereTemplate)
       coordtemp.push([longitude[j],latitude[j]])
-      bearingtemp.push(bearing[j])
       routetemp.push(routeid[j])
+      stoptemp.push(stopid[j])
       
       }
       //Pushing array in overall marker array
       
       model.push(modeltemp)
       coord.push(coordtemp)
-      bear.push(bearingtemp)
+      stops.push(stoptemp)
       route.push(routetemp)
     } 
     console.log(model)
@@ -208,7 +211,11 @@ labelLayerId
               console.log('the id is'+modelID)
               const popup = new mapboxgl.Popup({ closeOnClick: false })
                       .setLngLat(coord[i][j])
-                      .setHTML('<h1>'+route[i][j]+'</h1>')
+                      .setHTML('<h3 id="firstHeading" class="firstHeading">'+String(vehicletype[i])+' to: '+String(stops[i][j])+' </h3>' +
+                      '<div id="bodyContent">' +
+                      '<p>Route ID: '+String(route[i][j])+' </p>' +
+                      '<p>Coordinates: '+String(coord[i][j][0])+' , '+String(coord[i][j][1])+' </p>' +
+                      '<img src= '+logolist[i]+">" )
                       .addTo(map);
             }
           
@@ -234,7 +241,7 @@ labelLayerId
         //Extracting coordinates
         let latitude=data[i][0]
         let longitude=data[i][1]
-        let bearing=data[i][2]
+        
         
         //Looping for each individual vehicle 
         for(let j=0;j<latitude.length;j++){//Creating all the markers
@@ -244,11 +251,10 @@ labelLayerId
              let vehicle=model[i][j]
              let origin=coord[i][j]
              let destination=[longitude[j],latitude[j]]
-             let initialbear=bear[i][j]
-             let finalbear=bearing[j]
-            if (destination==undefined||finalbear==undefined){
+             
+            if (destination==undefined){//||finalbear==undefined
               destination=origin
-              finalbear==initialbear
+             
             }
             let options = {
               path: [origin,destination],
@@ -256,12 +262,10 @@ labelLayerId
               trackHeading:true
               
             }
-            let cubeoptions={
-              rotation:[0,0,finalbear]
-            }
+            
              model[i][j].followPath(options,function() {
               
-              //model[i][j].set(cubeoptions)
+              
               tb.update();
             })
           

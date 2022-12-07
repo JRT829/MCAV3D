@@ -38,6 +38,7 @@ def event():
         longitude=[]
         bearing=[]
         routeid=[]
+        stopid=[]
 
     
 
@@ -57,8 +58,9 @@ def event():
             longitude.append(entity.vehicle.position.longitude)
             bearing.append(entity.vehicle.position.bearing)
             routeid.append(entity.vehicle.trip.route_id)
+            stopid.append(entity.vehicle.stop_id) 
         #Putting all the information into one array(socket does not support object orientation for some reason) 
-        info=[latitude,longitude,bearing,routeid]
+        info=[latitude,longitude,routeid,stopid]
         #Pushing the info of that vehicle type onto the master array
         data.append(info)
         
