@@ -1,6 +1,7 @@
 //Initialising socket.IO server
 let socket = io('http://localhost:5000');
 
+//Accessing the map 
 mapboxgl.accessToken = 'pk.eyJ1IjoianRheTAwNTEiLCJhIjoiY2xhdjBnZXVtMDEzejNubG1nZ21hN3VjMiJ9.H7P1__12c75cLxmNEj6Zug';
 
 //Icons
@@ -12,14 +13,18 @@ const lightraillogo='https://i.ibb.co/qx2kPJg/pngwing-com-1.png'
 const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
 
 //Initial variables 
-  let iconlist=[tramicons,tramicons]
-  let logolist=[lightraillogo,lightraillogo]
+  //Empty variables
   let model=[]
   let coord=[]
   let stops=[]
   let route=[]
-  let colors=[0x660000,0x073763]
+  //Preset variables(Change all of the variables if adding an extra/removing a vehicle type eg.trains)
+  let iconlist=[tramicons,tramicons]
+  let logolist=[lightraillogo,lightraillogo]
+  let colors=[0x660000,0x073763]//Color for the objects 
   let vehicletype = ['Light Rail','Light Rail']
+
+//Creating 3D environment 
   window.tb = new Threebox(
     map,
     map.getCanvas().getContext('webgl'), //get the context from the map canvas
@@ -130,6 +135,23 @@ map.on('click', 'innerweststops', (e) => {
   .setHTML(description)
   .addTo(map);
   });
+  map.on('click', 'cbdandsoutheaststops', (e) => {
+    // Copy coordinates array.
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const description = e.features[0].properties.stop_name;
+     
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+     
+    new mapboxgl.Popup()
+    .setLngLat(coordinates)
+    .setHTML(description)
+    .addTo(map);
+    });
  // INFO WINDO NOT WORKING
  map.on('click',function(e){
   // calculate objects intersecting the picking ray
@@ -168,8 +190,6 @@ map.on('click', 'innerweststops', (e) => {
           
            } 
       }
-  }else{
-    console.log('this is not an object')
   }
   
  })
@@ -186,44 +206,39 @@ map.on('click', 'innerweststops', (e) => {
     socket.on('data',function(data){//From emitting event (spawn) event (tram) is triggered) 
     //Looping for each vehicle type 
     for(let i=0;i<data.length;i++){
-        //console.log(coordinates)//Testing if coordinates are present 
+        
         //Extracting coordinates
         let latitude=data[i][0]
         let longitude=data[i][1]
-        
-        
+
         //Looping for each individual vehicle 
         for(let j=0;j<latitude.length;j++){//Creating all the markers
-            //Converting coordinates into google compatible coordinates 
             
-             
+             //Retrieving vehicle, their previous coordinates and their new updated coordinates 
              let vehicle=model[i][j]
              let origin=coord[i][j]
              let destination=[longitude[j],latitude[j]]
-             
-            if (destination==undefined){//||finalbear==undefined
+
+            // Sometimes the api gives some undefined data so we just ignore it and reuse the last coordinates that were received
+            if (destination==undefined){
               destination=origin
-             
             }
+
+            //Setting animation properties
             let options = {
               path: [origin,destination],
-              duration: 3000,
-              trackHeading:true
-              
+              duration: 3000,//Length of animation
+              trackHeading:true//Object to orient itself in the direction of the path(more usable for cubes since spheres have no effect when rotated along the z plane)
             }
-            
+
+            //Executing the animation 
              model[i][j].followPath(options,function() {
-              
-              
+            //Updating the 3D scene
               tb.update();
             })
           
-             //model[i][j].setCoords([longitude[j],latitude[j]])
-             //tb.update()
-             
+             //Updating the new coordinations into the master coordinate array
              coord[i].splice(j,1,destination)
-            
-            
              } 
         }
     
@@ -235,9 +250,9 @@ map.on('click', 'innerweststops', (e) => {
 
   //Repeating the update function for continous updates 
   try{
-  setInterval(replaceMarkers,3000,coord,model)
+    setInterval(replaceMarkers,3000,coord,model)
   }
-catch(e){
-  console.log(e)
- setInterval(replaceMarkers,3000,coord,model)
-}
+  catch(e){
+    console.log(e)//Making the code continue regardless of error 
+    setInterval(replaceMarkers,3000,coord,model)
+  }

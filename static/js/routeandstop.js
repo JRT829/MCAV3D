@@ -1,12 +1,12 @@
-
+//Placing all the layers(ie. route, stop and 3d building layers) 
 map.on('style.load', function() {
       
 
     map.addSource('innerwest', {
-      type: 'geojson',
-      data: 'static/js/innerwest.geojson'
-      });
-      map.addLayer({
+        type: 'geojson',
+        data: 'static/js/geojsonfiles/innerwest.geojson'
+        });
+    map.addLayer({
         'id': 'innerwest',
         'type': 'line',
         'source': 'innerwest',
@@ -19,33 +19,33 @@ map.on('style.load', function() {
         'line-width': 8
         }
         });
-        map.addSource('cbdandsoutheast', {
-          type: 'geojson',
-          data: 'static/js/cbdandsoutheast.geojson'
-          });
-          map.addLayer({
-            'id': 'cbdandsoutheast',
-            'type': 'line',
-            'source': 'cbdandsoutheast',
-            'layout': {
-            'line-join': 'round',
-            'line-cap': 'round'
-            },
-            'paint': {
-            'line-color': '#660000',
-            'line-width': 8
-            }
-            });
+    map.addSource('cbdandsoutheast', {
+        type: 'geojson',
+        data: 'static/js/geojsonfiles/cbdandsoutheast.geojson'
+        });
+    map.addLayer({
+        'id': 'cbdandsoutheast',
+        'type': 'line',
+        'source': 'cbdandsoutheast',
+        'layout': {
+        'line-join': 'round',
+        'line-cap': 'round'
+        },
+        'paint': {
+        'line-color': '#660000',
+        'line-width': 8
+        }
+        });
 
 
             map.loadImage(
-                'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+                'https://i.ibb.co/qx2kPJg/pngwing-com-1.png',
                 (error, image) => {
                 if (error) throw error;
                 map.addImage('custom-marker', image);
             map.addSource('cbdandsoutheaststops', {
                 type: 'geojson',
-                data: 'static/js/cbdandsoutheaststops.geojson'
+                data: 'static/js/geojsonfiles/cbdandsoutheaststops.geojson'
                 });
                 map.addLayer({
                     'id': 'cbdandsoutheaststops',
@@ -73,7 +73,7 @@ map.on('style.load', function() {
                     map.addImage('custom-marker2', image);
                 map.addSource('innerweststops', {
                     type: 'geojson',
-                    data: 'static/js/innerweststops.geojson'
+                    data: 'static/js/geojsonfiles/innerweststops.geojson'
                     });
                     map.addLayer({
                         'id': 'innerweststops',

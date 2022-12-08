@@ -66,16 +66,23 @@ def event():
         data.append(info)
         
 
-    #Sending data to client(index.html)            
+    #Sending data to client(update.js)            
     emit('data',data)
-    
+
+
+#Extracting stop that tram is arriving to
 @socketio.on('stop')
 def handlestop(stopid):
+    #Creating url with stop id to find the station name(Using the Trip Planner API)
     requesturl='https://api.transport.nsw.gov.au/v1/tp/stop_finder?outputFormat=rapidJSON&type_sf=stop&name_sf='+str(stopid)+'&coordOutputFormat=EPSG%3A4326&TfNSWSF=true&version=10.2.1.42'
+    #Making the request(same authorization) 
     req = requests.get(requesturl,headers=headers)
+    #Retrieving data and converting it to json for object manipulation 
     reqcontent=req.content
     jsonResponse = json.loads(reqcontent.decode('utf-8'))
+    #Getting the station name 
     station=jsonResponse['locations'][0]['name']
+    #Sending the name back to the client(update.js)
     emit('stopcall',station)
 
         
