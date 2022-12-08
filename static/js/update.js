@@ -29,41 +29,7 @@ const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
   map.on('style.load', function() {
       
 
-    map.addSource('innerwest', {
-      type: 'geojson',
-      data: 'static/js/innerwest.geojson'
-      });
-      map.addLayer({
-        'id': 'innerwest',
-        'type': 'line',
-        'source': 'innerwest',
-        'layout': {
-        'line-join': 'round',
-        'line-cap': 'round'
-        },
-        'paint': {
-        'line-color': '#073763',
-        'line-width': 8
-        }
-        });
-        map.addSource('cbdandsoutheast', {
-          type: 'geojson',
-          data: 'static/js/cbdandsoutheast.geojson'
-          });
-          map.addLayer({
-            'id': 'cbdandsoutheast',
-            'type': 'line',
-            'source': 'cbdandsoutheast',
-            'layout': {
-            'line-join': 'round',
-            'line-cap': 'round'
-            },
-            'paint': {
-            'line-color': '#660000',
-            'line-width': 8
-            }
-            });
-    
+   
 
 
   map.addLayer({
@@ -141,64 +107,37 @@ const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
   });
 
   // Insert the layer beneath any symbol layer.
-const layers = map.getStyle().layers;
-const labelLayerId = layers.find(
-(layer) => layer.type === 'symbol' && layer.layout['text-field']
-).id;
- 
-// The 'building' layer in the Mapbox Streets
-// vector tileset contains building height data
-// from OpenStreetMap.
-map.addLayer(
-{
-'id': 'add-3d-buildings',
-'source': 'composite',
-'source-layer': 'building',
-'filter': ['==', 'extrude', 'true'],
-'type': 'fill-extrusion',
-'minzoom': 15,
-'paint': {
-'fill-extrusion-color': '#aaa',
- 
-// Use an 'interpolate' expression to
-// add a smooth transition effect to
-// the buildings as the user zooms in.
-'fill-extrusion-height': [
-'interpolate',
-['linear'],
-['zoom'],
-15,
-0,
-15.05,
-['get', 'height']
-],
-'fill-extrusion-base': [
-'interpolate',
-['linear'],
-['zoom'],
-15,
-0,
-15.05,
-['get', 'min_height']
-],
-'fill-extrusion-opacity': 0.6
-}
-},
-labelLayerId
-    );
 
 
 
 
 })
 //First iteration
-  
+map.on('click', 'innerweststops', (e) => {
+  // Copy coordinates array.
+  const coordinates = e.features[0].geometry.coordinates.slice();
+  const description = e.features[0].properties.stop_name;
+   
+  // Ensure that if the map is zoomed out such that multiple
+  // copies of the feature are visible, the popup appears
+  // over the copy being pointed to.
+  while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+  coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  }
+   
+  new mapboxgl.Popup()
+  .setLngLat(coordinates)
+  .setHTML(description)
+  .addTo(map);
+  });
  // INFO WINDO NOT WORKING
- map.on('click',(e)=>{
+ map.on('click',function(e){
   // calculate objects intersecting the picking ray
-  var intersect = tb.queryRenderedFeatures(e.point)[0]
+  
+  console.log(e)
   //console.log(intersect)
-  if (typeof intersect.object =='object'){
+  if ( tb.queryRenderedFeatures(e.point)[0].object != undefined){
+    let intersect=tb.queryRenderedFeatures(e.point)[0]
     console.log(intersect.object)
     let clickedID=intersect.object.parent.uuid
     console.log(intersect.object.parent.uuid)
@@ -229,6 +168,8 @@ labelLayerId
           
            } 
       }
+  }else{
+    console.log('this is not an object')
   }
   
  })
