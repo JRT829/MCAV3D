@@ -18,6 +18,7 @@ const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
   let coord=[]
   let stops=[]
   let route=[]
+  let speed=[]
   //Preset variables(Change all of the variables if adding an extra/removing a vehicle type eg.trains)
   let iconlist=[tramicons,tramicons]
   let logolist=[lightraillogo,lightraillogo]
@@ -51,11 +52,14 @@ const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
     let routetemp=[]
     let coordtemp=[]
     let stoptemp=[]
+    let speedtemp=[]
     //Extracting coordinate and route data
     let latitude=data[i][0]
     let longitude=data[i][1]
     let routeid=data[i][2]
     let stopid=data[i][3]
+    let speedid=data[i][4]
+    
     //Looping for each individual vehicle in that vehicle type
       for(let j=0;j<routeid.length;j++){
         //Converting coordinates into google compatible coordinates
@@ -93,6 +97,7 @@ const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
       coordtemp.push([longitude[j],latitude[j]])
       routetemp.push(routeid[j])
       stoptemp.push(stopid[j])
+      speedtemp.push(speedid[j])
       
       }
       //Pushing array in overall marker array
@@ -101,8 +106,9 @@ const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
       coord.push(coordtemp)
       stops.push(stoptemp)
       route.push(routetemp)
+      speed.push(speedtemp)
     } 
-    console.log(model)
+    console.log(speed)
   })
       
     },
@@ -179,6 +185,7 @@ map.on('click', 'innerweststops', (e) => {
                       '<div id="bodyContent">' +
                       '<p>Route ID: '+String(route[i][j])+' </p>' +
                       '<p>Coordinates: '+String(coord[i][j][0])+' , '+String(coord[i][j][1])+' </p>' +
+                      '<p>Speed: '+String(speed[i][j])+' </p>' +
                       '<img src= '+logolist[i]+">" )
                      
 
@@ -210,6 +217,7 @@ map.on('click', 'innerweststops', (e) => {
         //Extracting coordinates
         let latitude=data[i][0]
         let longitude=data[i][1]
+        let speedid=data[i][4]
 
         //Looping for each individual vehicle 
         for(let j=0;j<latitude.length;j++){//Creating all the markers
@@ -218,7 +226,7 @@ map.on('click', 'innerweststops', (e) => {
              let vehicle=model[i][j]
              let origin=coord[i][j]
              let destination=[longitude[j],latitude[j]]
-
+            let newspeed=speedid[j]
             // Sometimes the api gives some undefined data so we just ignore it and reuse the last coordinates that were received
             if (destination==undefined){
               destination=origin
@@ -227,7 +235,7 @@ map.on('click', 'innerweststops', (e) => {
             //Setting animation properties
             let options = {
               path: [origin,destination],
-              duration: 3000,//Length of animation
+              duration: 2000,//Length of animation
               trackHeading:true//Object to orient itself in the direction of the path(more usable for cubes since spheres have no effect when rotated along the z plane)
             }
 
@@ -239,6 +247,7 @@ map.on('click', 'innerweststops', (e) => {
           
              //Updating the new coordinations into the master coordinate array
              coord[i].splice(j,1,destination)
+             speed[i].splice(j,1,newspeed)
              } 
         }
     
@@ -250,9 +259,9 @@ map.on('click', 'innerweststops', (e) => {
 
   //Repeating the update function for continous updates 
   try{
-    setInterval(replaceMarkers,3000,coord,model)
+    setInterval(replaceMarkers,2000,coord,model)
   }
   catch(e){
     console.log(e)//Making the code continue regardless of error 
-    setInterval(replaceMarkers,3000,coord,model)
+    setInterval(replaceMarkers,2000,coord,model)
   }

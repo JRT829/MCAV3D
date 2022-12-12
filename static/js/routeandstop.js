@@ -56,7 +56,6 @@ map.on('style.load', function() {
                         // get the title name from the source's "title" property
                         'text-field': ['get', 'title'],
                         'text-font': [
-                        'Open Sans Semibold',
                         'Arial Unicode MS Bold'
                         ],
                         'text-offset': [0, 1.25],
@@ -111,7 +110,7 @@ map.addLayer(
 'source-layer': 'building',
 'filter': ['==', 'extrude', 'true'],
 'type': 'fill-extrusion',
-'minzoom': 15,
+'minzoom': 20,
 'paint': {
 'fill-extrusion-color': '#aaa',
  

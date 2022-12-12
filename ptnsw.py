@@ -37,7 +37,7 @@ def event():
         info=[]
         latitude=[]
         longitude=[]
-        bearing=[]
+        speed=[]
         routeid=[]
         stopid=[]
 
@@ -57,11 +57,12 @@ def event():
         for entity in feed.entity:
             latitude.append(entity.vehicle.position.latitude)
             longitude.append(entity.vehicle.position.longitude)
-            bearing.append(entity.vehicle.position.bearing)
             routeid.append(entity.vehicle.trip.route_id)
             stopid.append(entity.vehicle.stop_id) 
+            if entity.vehicle.position.speed is not None:
+                speed.append(entity.vehicle.position.speed)
         #Putting all the information into one array(socket does not support object orientation for some reason) 
-        info=[latitude,longitude,routeid,stopid]
+        info=[latitude,longitude,routeid,stopid,speed]
         #Pushing the info of that vehicle type onto the master array
         data.append(info)
         
