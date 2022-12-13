@@ -39,7 +39,7 @@ map.on('style.load', function() {
 
 
             map.loadImage(
-                'https://i.ibb.co/qx2kPJg/pngwing-com-1.png',
+                'static/img/lightraillogo.png',
                 (error, image) => {
                 if (error) throw error;
                 map.addImage('custom-marker', image);
@@ -66,7 +66,7 @@ map.on('style.load', function() {
                 })
 
                 map.loadImage(
-                    'https://i.ibb.co/qx2kPJg/pngwing-com-1.png',
+                    'static/img/lightraillogo.png',
                     (error, image) => {
                     if (error) throw error;
                     map.addImage('custom-marker2', image);

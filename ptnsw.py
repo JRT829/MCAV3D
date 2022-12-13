@@ -82,7 +82,7 @@ def handlestop(stopid):
     reqcontent=req.content
     jsonResponse = json.loads(reqcontent.decode('utf-8'))
     #Getting the station name 
-    station=jsonResponse['locations'][0]['name']
+    station=jsonResponse['locations'][0]['disassembledName']
     #Sending the name back to the client(update.js)
     emit('stopcall',station)
 

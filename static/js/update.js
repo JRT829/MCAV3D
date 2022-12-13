@@ -4,13 +4,7 @@ let socket = io('http://localhost:5000');
 //Accessing the map 
 mapboxgl.accessToken = 'pk.eyJ1IjoianRheTAwNTEiLCJhIjoiY2xhdjBnZXVtMDEzejNubG1nZ21hN3VjMiJ9.H7P1__12c75cLxmNEj6Zug';
 
-//Icons
-const tramicons= 'https://img.icons8.com/cotton/30/000000/tram--v6.png'
-const busicon= 'https://img.icons8.com/office/16/000000/bus.png'
-const trainicon= 'https://img.icons8.com/emoji/30/000000/train-emoji.png'
-const lightrail='https://e7.pngegg.com/pngimages/722/807/png-clipart-tram-light-rail-in-sydney-transport-for-nsw-lilyfield-travel-miscellaneous-text-thumbnail.png' 
-const lightraillogo='https://i.ibb.co/qx2kPJg/pngwing-com-1.png'
-const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
+
 
 //Initial variables 
   //Empty variables
@@ -20,8 +14,6 @@ const metrologo='https://i.ibb.co/qyPhHP3/Metro-Logo.png'
   let route=[]
   let speed=[]
   //Preset variables(Change all of the variables if adding an extra/removing a vehicle type eg.trains)
-  let iconlist=[tramicons,tramicons]
-  let logolist=[lightraillogo,lightraillogo]
   let colors=[0x660000,0x073763]//Color for the objects 
   let vehicletype = ['Light Rail','Light Rail']
 
@@ -186,7 +178,7 @@ map.on('click', 'innerweststops', (e) => {
                       '<p>Route ID: '+String(route[i][j])+' </p>' +
                       '<p>Coordinates: '+String(coord[i][j][0])+' , '+String(coord[i][j][1])+' </p>' +
                       '<p>Speed: '+String(speed[i][j])+' </p>' +
-                      '<img src= '+logolist[i]+">" )
+                      '<img src= '+'static/img/lightraillogo.png'+">" )
                      
 
                       

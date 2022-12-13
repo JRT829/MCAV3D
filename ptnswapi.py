@@ -31,4 +31,4 @@ req = requests.get(requesturl,headers=headers)
 reqcontent=req.content
 jsonResponse = json.loads(reqcontent.decode('utf-8'))
 station=jsonResponse['locations'][0]['name']
-print(station)
+print(reqcontent)
