@@ -18,11 +18,18 @@ A 3D visualisation of New South Wales Public Transport API with the use of Mapbo
 
 # Requirements 
 * C++ (for the 3D visualisation program threebox)
-  *[threebox](https://github.com/peterqliu/threebox)
+  * [threebox](https://github.com/peterqliu/threebox)
 * Python 3.9
 * Visual Studio Code 
 * NOT COMPATIBLE WITH MAC OS  
 
 # Installation
 * Clone repo 
-* Install requirements.txt 
+* Install requirements.txt
+* Insert API keys 
+
+# Launching the applicaiton
+* Run and Debug(VS Code) 
+* type Flask in prompt
+* type the python file name (ptnsw.py)
+* ctrl click link in terminal 
