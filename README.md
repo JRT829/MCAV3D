@@ -27,9 +27,15 @@ A 3D visualisation of New South Wales Public Transport API with the use of Mapbo
 * Clone repo 
 * Install requirements.txt
 * Insert API keys 
+  * tfnsw API key: `ptnsw.py` and `ptnswapi.py` at `headers['Authorization']=`
+  * Mapbox API key: `static/js/maps.js` at `mapboxgl.accesstoken`
 
 # Launching the applicaiton
 * Run and Debug(VS Code) 
 * type Flask in prompt
 * type the python file name (ptnsw.py)
 * ctrl click link in terminal 
+
+# Contact 
+* email: jtay0051@student.monash.edu
+* fb: Jin Ren Tay 
